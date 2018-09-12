@@ -1,23 +1,28 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { ProductsService } from "./products.service";
 
 @Component({
     selector: 'app-products',
     templateUrl: './products.component.html'
 })
-export class ProductsComponent {
+export class ProductsComponent implements OnInit{
     productName = 'A Book';
     isDisabled = true;
-    products = ['A Book', 'A Tree'];
+    products = [];
 
-    constructor() {
+    constructor(private productsService: ProductsService) {
         setTimeout(() => {
             this.isDisabled = false;
         }, 3000);
     }
 
+    ngOnInit() {
+        this.products = this.productsService.getProducts();
+    }
+
     onAddProduct(form) {
         if (form.valid) {
-            this.products.push(form.value.productName);
+            this.productsService.addProduct(form.value.productName);
         }
     }
 
